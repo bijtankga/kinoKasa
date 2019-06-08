@@ -31,7 +31,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Rezerwacja.findById", query = "SELECT r FROM Rezerwacja r WHERE r.id = :id")
     , @NamedQuery(name = "Rezerwacja.findByKupione", query = "SELECT r FROM Rezerwacja r WHERE r.kupione = :kupione")
     //, @NamedQuery(name = "Rezerwacja.findBySeans", query = "SELECT r FROM Rezerwacja r LEFT JOIN Miejsce m ON r.id = m.id where m.seans = :seans")})
-    , @NamedQuery(name = "Rezerwacja.findBySeans", query = "SELECT r FROM Rezerwacja r LEFT JOIN Miejsce m ON r = m.rezerwacja where m.seans = :seans GROUP BY r")})
+    , @NamedQuery(name = "Rezerwacja.findBySeans", query = "SELECT r FROM Rezerwacja r LEFT JOIN Miejsce m ON r = m.rezerwacja where m.seans = :seans GROUP BY r")
+    , @NamedQuery(name = "Rezerwacja.findByKlientFilm", query = "select r From Rezerwacja r LEFT JOIN Klient k ON k = r.klient LEFT JOIN Miejsce m ON r = m.rezerwacja "
+            + "LEFT JOIN Seans s ON s = m.seans LEFT JOIN Film f ON f = s.film WHERE f.nazwa LIKE :tytul and k.imie LIKE :imie AND k.nazwisko LIKE :nazwisko  GROUP BY r")})
 public class Rezerwacja implements Serializable {
 
     private static final long serialVersionUID = 1L;

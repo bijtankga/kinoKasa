@@ -74,7 +74,7 @@ public class Rezerwacje extends javax.swing.JFrame {
     }
     
     private EntityManager getEntityManager() {
-            if (emf==null) emf=Persistence.createEntityManagerFactory("kinoPU");
+            if (emf==null) emf=Persistence.createEntityManagerFactory("kinoPU2");
             return emf.createEntityManager();
     }
     
@@ -265,6 +265,7 @@ public class Rezerwacje extends javax.swing.JFrame {
         zamknijOknoMItem = new javax.swing.JMenuItem();
         actionMenu = new javax.swing.JMenu();
         odswiezMItem = new javax.swing.JMenuItem();
+        szuakjMItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Rezerwacje i Wykup Biletów");
@@ -413,7 +414,7 @@ public class Rezerwacje extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        legendaPanel.setLayout(new java.awt.GridLayout());
+        legendaPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         zajeteLegendaTButton.setText("ZAJĘTE");
         zajeteLegendaTButton.setEnabled(false);
@@ -696,6 +697,15 @@ public class Rezerwacje extends javax.swing.JFrame {
         });
         actionMenu.add(odswiezMItem);
 
+        szuakjMItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        szuakjMItem.setText("Szukaj");
+        szuakjMItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                szuakjMItemActionPerformed(evt);
+            }
+        });
+        actionMenu.add(szuakjMItem);
+
         jMenuBar1.add(actionMenu);
 
         setJMenuBar(jMenuBar1);
@@ -960,6 +970,12 @@ public class Rezerwacje extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_zamknijOknoMItemActionPerformed
 
+    private void szuakjMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_szuakjMItemActionPerformed
+        // TODO add your handling code here:
+        
+        new RezerwacjeSzukaj().setVisible(true);
+    }//GEN-LAST:event_szuakjMItemActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -1049,6 +1065,7 @@ public class Rezerwacje extends javax.swing.JFrame {
     private javax.swing.JPanel salaPanel;
     private javax.swing.JPanel seansLabel;
     private javax.swing.JButton skasujButton;
+    private javax.swing.JMenuItem szuakjMItem;
     private javax.swing.JLabel typLabel;
     private javax.swing.JLabel typOpisLabel;
     private javax.swing.JLabel tytulLabel;

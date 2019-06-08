@@ -56,7 +56,7 @@ public class Seanse extends javax.swing.JFrame {
     }
     
     private EntityManager getEntityManager() {
-            if (emf==null) emf=Persistence.createEntityManagerFactory("kinoPU");
+            if (emf==null) emf=Persistence.createEntityManagerFactory("kinoPU2");
             return emf.createEntityManager();
     }
     
@@ -137,6 +137,7 @@ public class Seanse extends javax.swing.JFrame {
         zamknijOknoMItem = new javax.swing.JMenuItem();
         actionMenu = new javax.swing.JMenu();
         odswiezMItem = new javax.swing.JMenuItem();
+        szuakjMItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Seanse");
@@ -316,6 +317,15 @@ public class Seanse extends javax.swing.JFrame {
         });
         actionMenu.add(odswiezMItem);
 
+        szuakjMItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        szuakjMItem.setText("Szukaj");
+        szuakjMItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                szuakjMItemActionPerformed(evt);
+            }
+        });
+        actionMenu.add(szuakjMItem);
+
         jMenuBar1.add(actionMenu);
 
         setJMenuBar(jMenuBar1);
@@ -463,6 +473,12 @@ public class Seanse extends javax.swing.JFrame {
         getSeanss();
     }//GEN-LAST:event_odswiezMItemActionPerformed
 
+    private void szuakjMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_szuakjMItemActionPerformed
+        // TODO add your handling code here:
+
+        new RezerwacjeSzukaj().setVisible(true);
+    }//GEN-LAST:event_szuakjMItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -494,7 +510,7 @@ public class Seanse extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                EntityManager em=Persistence.createEntityManagerFactory("kinoPU").createEntityManager();
+                EntityManager em=Persistence.createEntityManagerFactory("kinoPU2").createEntityManager();
                 kino.Film film;
                 TypedQuery<kino.Seans> q;
                 try{
@@ -533,6 +549,7 @@ public class Seanse extends javax.swing.JFrame {
     private javax.swing.JList<kino.Seans> seansList;
     private javax.swing.JPanel seansePanel;
     private javax.swing.JButton skasujButton;
+    private javax.swing.JMenuItem szuakjMItem;
     private javax.swing.JLabel tytulLabel;
     private javax.swing.JMenuItem zamknijMItem;
     private javax.swing.JMenuItem zamknijOknoMItem;
