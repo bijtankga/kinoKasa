@@ -41,11 +41,10 @@ public class Seanse extends javax.swing.JFrame {
         tytulLabel.setText( "<html>" + film.getNazwa() + " (" + film.getRok() + ") </html>");
         
         
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         //DateFormat hourFormat = new SimpleDateFormat("HH:mm");
         
         cenaText.setText("10,50");
-        dataText.setText( dateFormat.format(new Date()));
+        dataText.setText( new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
         godzinaText.setText("12:00");
         
         //this.nrSeansu = nrSeansu;
@@ -84,6 +83,26 @@ public class Seanse extends javax.swing.JFrame {
         finally {
             em.close();
         }
+        
+        skasujButton.setEnabled(false);
+        rezerwacjeButton.setEnabled(false);
+    }
+    
+    private Boolean czyWykupione()
+    {
+        if (seansList.isSelectionEmpty())
+            return false;
+        for (kino.Miejsce miejsce : seansList.getSelectedValue().getMiejsceCollection())
+        {
+            if (miejsce.getRezerwacja() != null)
+            {
+                if (miejsce.getRezerwacja().getKupione())
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
     /**
@@ -112,10 +131,15 @@ public class Seanse extends javax.swing.JFrame {
         dodajButton = new javax.swing.JButton();
         cenaText = new javax.swing.JFormattedTextField();
         tytulLabel = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        fileMenu = new javax.swing.JMenu();
+        zamknijMItem = new javax.swing.JMenuItem();
+        zamknijOknoMItem = new javax.swing.JMenuItem();
+        actionMenu = new javax.swing.JMenu();
+        odswiezMItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Seanse");
-        setPreferredSize(new java.awt.Dimension(707, 550));
         setResizable(false);
 
         seansePanel.setPreferredSize(new java.awt.Dimension(350, 522));
@@ -259,6 +283,43 @@ public class Seanse extends javax.swing.JFrame {
         tytulLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tytulLabel.setText("JAKIS FILM");
 
+        fileMenu.setText("File");
+
+        zamknijMItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        zamknijMItem.setText("Zamknij Program");
+        zamknijMItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                zamknijMItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(zamknijMItem);
+
+        zamknijOknoMItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        zamknijOknoMItem.setText("Zamknij Okno");
+        zamknijOknoMItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                zamknijOknoMItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(zamknijOknoMItem);
+
+        jMenuBar1.add(fileMenu);
+
+        actionMenu.setText("Action");
+
+        odswiezMItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        odswiezMItem.setText("Odśwież");
+        odswiezMItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                odswiezMItemActionPerformed(evt);
+            }
+        });
+        actionMenu.add(odswiezMItem);
+
+        jMenuBar1.add(actionMenu);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -282,10 +343,10 @@ public class Seanse extends javax.swing.JFrame {
                 .addComponent(tytulLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(90, 90, 90)
                 .addComponent(dodajSeansPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(134, Short.MAX_VALUE))
+                .addContainerGap(113, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(seansePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE)
+                .addComponent(seansePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -316,6 +377,8 @@ public class Seanse extends javax.swing.JFrame {
         }
         catch(PersistenceException ex)
         {
+            if (em.getTransaction().isActive())
+                em.getTransaction().rollback();
             Logger.getLogger(Seanse.class.getName()).log(Level.SEVERE, null, ex);
             
             JOptionPane.showMessageDialog(null,"Błąd połączenia z bazą danych");
@@ -324,7 +387,7 @@ public class Seanse extends javax.swing.JFrame {
         {
             if (em.getTransaction().isActive())
                 em.getTransaction().rollback();
-            JOptionPane.showMessageDialog(null,"Błąd przetwarzania danych");
+            JOptionPane.showMessageDialog(null,"Błąd przetwarzania żądania");
         }
         finally {
             em.close();
@@ -339,18 +402,25 @@ public class Seanse extends javax.swing.JFrame {
         
         try
         {
+            if (czyWykupione())
+            {
+                JOptionPane.showMessageDialog(null,"Nie można usunąć, ktoś wykupił bilety");
+                getSeanss();
+                return;
+            }
             em.getTransaction().begin();
             seans = em.find(seans.getClass(), seans.getId());
             em.remove(seans);
+            em.getTransaction().commit();
             seansListModel.removeElement(seans);
             rezerwacjeButton.setEnabled(false);
             skasujButton.setEnabled(false);
-            em.getTransaction().commit();
         }
         catch(PersistenceException ex)
         {
             Logger.getLogger(Seanse.class.getName()).log(Level.SEVERE, null, ex);
-            
+            if (em.getTransaction().isActive())
+                em.getTransaction().rollback();
             JOptionPane.showMessageDialog(null,"Błąd połączenia z bazą danych");
         }
         catch (Exception ex)
@@ -358,7 +428,7 @@ public class Seanse extends javax.swing.JFrame {
             if (em.getTransaction().isActive())
                 em.getTransaction().rollback();
             Logger.getLogger(Seanse.class.getName()).log(Level.SEVERE, null, ex);
-
+            JOptionPane.showMessageDialog(null,"Błąd przetwarzania żądania");
         }
         finally
         {
@@ -369,7 +439,8 @@ public class Seanse extends javax.swing.JFrame {
     private void seansListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_seansListValueChanged
         // TODO add your handling code here:
         rezerwacjeButton.setEnabled(true);
-        skasujButton.setEnabled(true);
+        
+        skasujButton.setEnabled(!czyWykupione());
     }//GEN-LAST:event_seansListValueChanged
 
     private void rezerwacjeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rezerwacjeButtonActionPerformed
@@ -377,6 +448,20 @@ public class Seanse extends javax.swing.JFrame {
         Rezerwacje rezerwacje = new Rezerwacje(seansList.getSelectedValue());
         rezerwacje.setVisible(true);
     }//GEN-LAST:event_rezerwacjeButtonActionPerformed
+
+    private void zamknijMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zamknijMItemActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_zamknijMItemActionPerformed
+
+    private void zamknijOknoMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zamknijOknoMItemActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_zamknijOknoMItemActionPerformed
+
+    private void odswiezMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_odswiezMItemActionPerformed
+        getSeanss();
+    }//GEN-LAST:event_odswiezMItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -414,7 +499,7 @@ public class Seanse extends javax.swing.JFrame {
                 TypedQuery<kino.Seans> q;
                 try{
                     q = em.createNamedQuery("Film.findById", kino.Seans.class);
-                    q.setParameter("id", 1);
+                    q.setParameter("id", 2);
                     film = (kino.Film)q.getResultList().toArray()[0];
                 }
                 finally{
@@ -428,6 +513,7 @@ public class Seanse extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu actionMenu;
     private javax.swing.JLabel cenaLabel;
     private javax.swing.JFormattedTextField cenaText;
     private javax.swing.JCheckBox d3Check;
@@ -435,15 +521,20 @@ public class Seanse extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField dataText;
     private javax.swing.JButton dodajButton;
     private javax.swing.JPanel dodajSeansPanel;
+    private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel godzinaLabel;
     private javax.swing.JFormattedTextField godzinaText;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton odswiezButton;
+    private javax.swing.JMenuItem odswiezMItem;
     private javax.swing.JButton rezerwacjeButton;
     private javax.swing.JList<kino.Seans> seansList;
     private javax.swing.JPanel seansePanel;
     private javax.swing.JButton skasujButton;
     private javax.swing.JLabel tytulLabel;
+    private javax.swing.JMenuItem zamknijMItem;
+    private javax.swing.JMenuItem zamknijOknoMItem;
     // End of variables declaration//GEN-END:variables
 }

@@ -9,7 +9,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,18 +41,36 @@ public class Rezerwacje extends javax.swing.JFrame {
     private List<List<JToggleButton>> przyciski;
     private List<kino.Miejsce> miejsca;
     
+    public Rezerwacje(kino.Rezerwacja rezerwacja)
+    {
+        this( ((kino.Miejsce)new ArrayList(rezerwacja.getMiejsceCollection()).get(0)).getSeans());
+        
+        rezerwacjeList.setSelectedValue(rezerwacja, rootPaneCheckingEnabled);
+    }
+    
     public Rezerwacje(kino.Seans seans) {
         initComponents();
+        klientPanel.setVisible(false);
         
         this.seans = seans;
         miejsca = new ArrayList<>();
         przyciski = new ArrayList<>();
+        
+        dataLabel.setText( new SimpleDateFormat("HH:mm").format(seans.getData()) );
+        godzinaLabel.setText( new SimpleDateFormat("dd-MM-yyyy").format(seans.getData()) );
+        if(seans.getD3())
+            typLabel.setText( "3D");
+        else
+            typLabel.setText( "2D");
+        tytulLabel.setText( seans.getFilm().getNazwa() );
+        rezyserLabel.setText( seans.getFilm().getRezyser() );
+        rokLabel.setText( ""+seans.getFilm().getRok() );
+        
         zaladujSale();
         
         rezerwacjeListModel = new DefaultListModel<>();
         rezerwacjeList.setModel(rezerwacjeListModel);
         getRezerwacje();
-        
     }
     
     private EntityManager getEntityManager() {
@@ -200,7 +220,7 @@ public class Rezerwacje extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         rezerwacjeList = new javax.swing.JList<>();
         odznaczButton = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        cenaPanel = new javax.swing.JPanel();
         cenaTextLabel = new javax.swing.JLabel();
         biletySlider = new javax.swing.JSlider();
         normalneTextLabel = new javax.swing.JLabel();
@@ -216,9 +236,35 @@ public class Rezerwacje extends javax.swing.JFrame {
         zarezerwowaneLegendaTButton = new javax.swing.JToggleButton();
         odrezerwowaneLegendaTButton = new javax.swing.JToggleButton();
         salaPanel = new javax.swing.JPanel();
-        miejscaPanel = new javax.swing.JPanel();
         ekranPanel = new javax.swing.JPanel();
         ekranLabel = new javax.swing.JLabel();
+        miejscaPanel = new javax.swing.JPanel();
+        klientPanel = new javax.swing.JPanel();
+        imieOpisLabel = new javax.swing.JLabel();
+        nazwiskoOpisLabel = new javax.swing.JLabel();
+        emailOpisLabel = new javax.swing.JLabel();
+        imieLabel = new javax.swing.JLabel();
+        nazwiskoLabel = new javax.swing.JLabel();
+        emailLabel = new javax.swing.JLabel();
+        seansLabel = new javax.swing.JPanel();
+        dataOpisLabel = new javax.swing.JLabel();
+        godzinaOpisLabel = new javax.swing.JLabel();
+        godzinaLabel = new javax.swing.JLabel();
+        dataLabel = new javax.swing.JLabel();
+        tytulOpisLabel = new javax.swing.JLabel();
+        tytulLabel = new javax.swing.JLabel();
+        typOpisLabel = new javax.swing.JLabel();
+        typLabel = new javax.swing.JLabel();
+        rezyserOpis = new javax.swing.JLabel();
+        rezyserLabel = new javax.swing.JLabel();
+        rokLabel = new javax.swing.JLabel();
+        rokOpisLabel = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        fileMenu = new javax.swing.JMenu();
+        zamknijMItem = new javax.swing.JMenuItem();
+        zamknijOknoMItem = new javax.swing.JMenuItem();
+        actionMenu = new javax.swing.JMenu();
+        odswiezMItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Rezerwacje i Wykup Biletów");
@@ -283,13 +329,15 @@ public class Rezerwacje extends javax.swing.JFrame {
                     .addComponent(odswiezButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rezerwacjeLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(rezerwacjePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(odznaczButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(skasujButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+
+        cenaPanel.setPreferredSize(new java.awt.Dimension(250, 0));
 
         cenaTextLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cenaTextLabel.setText("Cena:");
@@ -321,14 +369,14 @@ public class Rezerwacje extends javax.swing.JFrame {
         cenaLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cenaLabel.setText("0");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout cenaPanelLayout = new javax.swing.GroupLayout(cenaPanel);
+        cenaPanel.setLayout(cenaPanelLayout);
+        cenaPanelLayout.setHorizontalGroup(
+            cenaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cenaPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(cenaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(cenaPanelLayout.createSequentialGroup()
                         .addComponent(normalneTextLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(normalneLabel)
@@ -337,19 +385,19 @@ public class Rezerwacje extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ulgoweLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(wykupButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, cenaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(biletySlider, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(cenaPanelLayout.createSequentialGroup()
                             .addComponent(cenaTextLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(cenaLabel))))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        cenaPanelLayout.setVerticalGroup(
+            cenaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cenaPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(cenaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(normalneTextLabel)
                     .addComponent(ulgoweTextLabel)
                     .addComponent(normalneLabel)
@@ -357,7 +405,7 @@ public class Rezerwacje extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(biletySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(cenaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cenaTextLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cenaLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -365,7 +413,7 @@ public class Rezerwacje extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        legendaPanel.setLayout(new java.awt.GridLayout(1, 0));
+        legendaPanel.setLayout(new java.awt.GridLayout());
 
         zajeteLegendaTButton.setText("ZAJĘTE");
         zajeteLegendaTButton.setEnabled(false);
@@ -412,8 +460,6 @@ public class Rezerwacje extends javax.swing.JFrame {
         });
         legendaPanel.add(odrezerwowaneLegendaTButton);
 
-        miejscaPanel.setLayout(new java.awt.GridLayout(3, 7));
-
         ekranPanel.setBackground(new java.awt.Color(102, 102, 102));
 
         ekranLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -438,6 +484,8 @@ public class Rezerwacje extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        miejscaPanel.setLayout(new java.awt.GridLayout(3, 7));
+
         javax.swing.GroupLayout salaPanelLayout = new javax.swing.GroupLayout(salaPanel);
         salaPanel.setLayout(salaPanelLayout);
         salaPanelLayout.setHorizontalGroup(
@@ -457,9 +505,200 @@ public class Rezerwacje extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(ekranPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45)
-                .addComponent(miejscaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                .addComponent(miejscaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        klientPanel.setPreferredSize(new java.awt.Dimension(250, 0));
+
+        imieOpisLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        imieOpisLabel.setText("Imie:");
+
+        nazwiskoOpisLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        nazwiskoOpisLabel.setText("Nazwisko:");
+
+        emailOpisLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        emailOpisLabel.setText("Email:");
+
+        imieLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        imieLabel.setText("jLabel4");
+
+        nazwiskoLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        nazwiskoLabel.setText("jLabel5");
+
+        emailLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        emailLabel.setText("jLabel6");
+
+        javax.swing.GroupLayout klientPanelLayout = new javax.swing.GroupLayout(klientPanel);
+        klientPanel.setLayout(klientPanelLayout);
+        klientPanelLayout.setHorizontalGroup(
+            klientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(klientPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(klientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(klientPanelLayout.createSequentialGroup()
+                        .addComponent(imieOpisLabel)
+                        .addGap(48, 48, 48)
+                        .addComponent(imieLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
+                    .addGroup(klientPanelLayout.createSequentialGroup()
+                        .addGroup(klientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nazwiskoOpisLabel)
+                            .addComponent(emailOpisLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(klientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(emailLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(nazwiskoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        klientPanelLayout.setVerticalGroup(
+            klientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(klientPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(klientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(imieOpisLabel)
+                    .addComponent(imieLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(klientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nazwiskoOpisLabel)
+                    .addComponent(nazwiskoLabel))
+                .addGap(18, 18, 18)
+                .addGroup(klientPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(emailOpisLabel)
+                    .addComponent(emailLabel))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        dataOpisLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        dataOpisLabel.setText("Data:");
+
+        godzinaOpisLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        godzinaOpisLabel.setText("Godzina:");
+
+        godzinaLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        godzinaLabel.setText("10/04/2019");
+
+        dataLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        dataLabel.setText("20:30");
+
+        tytulOpisLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tytulOpisLabel.setText("Tytuł:");
+
+        tytulLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tytulLabel.setText("jLabel1");
+
+        typOpisLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        typOpisLabel.setText("Typ:");
+
+        typLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        typLabel.setText("3d");
+
+        rezyserOpis.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        rezyserOpis.setText("Reżyser:");
+
+        rezyserLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        rezyserLabel.setText("jLabel1");
+
+        rokLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        rokLabel.setText("jLabel1");
+
+        rokOpisLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        rokOpisLabel.setText("Rok:");
+
+        javax.swing.GroupLayout seansLabelLayout = new javax.swing.GroupLayout(seansLabel);
+        seansLabel.setLayout(seansLabelLayout);
+        seansLabelLayout.setHorizontalGroup(
+            seansLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(seansLabelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(seansLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(seansLabelLayout.createSequentialGroup()
+                        .addGroup(seansLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(seansLabelLayout.createSequentialGroup()
+                                .addComponent(tytulOpisLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tytulLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(seansLabelLayout.createSequentialGroup()
+                                .addComponent(dataOpisLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(godzinaLabel)
+                                .addGap(81, 81, 81)
+                                .addComponent(godzinaOpisLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(dataLabel)
+                                .addGap(84, 84, 84)
+                                .addComponent(typOpisLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(typLabel)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(seansLabelLayout.createSequentialGroup()
+                        .addComponent(rezyserOpis)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(rezyserLabel)
+                        .addGap(106, 106, 106)
+                        .addComponent(rokOpisLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(rokLabel)
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
+        seansLabelLayout.setVerticalGroup(
+            seansLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(seansLabelLayout.createSequentialGroup()
+                .addGroup(seansLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dataOpisLabel)
+                    .addComponent(godzinaLabel)
+                    .addComponent(godzinaOpisLabel)
+                    .addComponent(dataLabel)
+                    .addComponent(typOpisLabel)
+                    .addComponent(typLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(seansLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tytulOpisLabel)
+                    .addComponent(tytulLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(seansLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rezyserOpis)
+                    .addComponent(rezyserLabel)
+                    .addComponent(rokOpisLabel)
+                    .addComponent(rokLabel)))
+        );
+
+        fileMenu.setText("File");
+
+        zamknijMItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        zamknijMItem.setText("Zamknij Program");
+        zamknijMItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                zamknijMItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(zamknijMItem);
+
+        zamknijOknoMItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        zamknijOknoMItem.setText("Zamknij Okno");
+        zamknijOknoMItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                zamknijOknoMItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(zamknijOknoMItem);
+
+        jMenuBar1.add(fileMenu);
+
+        actionMenu.setText("Action");
+
+        odswiezMItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        odswiezMItem.setText("Odśwież");
+        odswiezMItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                odswiezMItemActionPerformed(evt);
+            }
+        });
+        actionMenu.add(odswiezMItem);
+
+        jMenuBar1.add(actionMenu);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -468,29 +707,36 @@ public class Rezerwacje extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(rezerwacjePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(klientPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                        .addComponent(cenaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(140, 140, 140))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(legendaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(salaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(205, 205, 205)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(salaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(seansLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rezerwacjePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE)
+                    .addComponent(rezerwacjePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(seansLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(legendaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(salaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cenaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
+                            .addComponent(klientPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -533,6 +779,7 @@ public class Rezerwacje extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(rezerwacjeList.getSelectedValue() == null)
         {
+            klientPanel.setVisible(false);
             return;
         }
         else
@@ -565,7 +812,16 @@ public class Rezerwacje extends javax.swing.JFrame {
             biletySlider.setMaximum(ilosc);
             biletySlider.setValue(0);
             cenaLabel.setText(( seans.getCena().multiply(new BigDecimal(ilosc))).setScale(2).toString() );
-
+            
+            if (rezerwacjeList.getSelectedValue().getKlient().getId() == 1)
+                klientPanel.setVisible(false);
+            else
+            {
+                imieLabel.setText(rezerwacjeList.getSelectedValue().getKlient().getImie());
+                nazwiskoLabel.setText(rezerwacjeList.getSelectedValue().getKlient().getNazwisko());
+                emailLabel.setText(rezerwacjeList.getSelectedValue().getKlient().getEmail());
+                klientPanel.setVisible(true);
+            }
         }
         if(!rezerwacjeList.getSelectedValue().getKupione())
         {
@@ -658,8 +914,10 @@ public class Rezerwacje extends javax.swing.JFrame {
                 przycisk.setEnabled(false);
             }
         }
+        wyzerujPanelCeny();
         skasujButton.setEnabled(false);
         wykupButton.setEnabled(true);
+        klientPanel.setVisible(false);
     }//GEN-LAST:event_odznaczButtonActionPerformed
 
     private void biletySliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_biletySliderStateChanged
@@ -687,36 +945,122 @@ public class Rezerwacje extends javax.swing.JFrame {
         getRezerwacje();
     }//GEN-LAST:event_odswiezButtonActionPerformed
 
+    private void odswiezMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_odswiezMItemActionPerformed
+        zaladujSale();
+        getRezerwacje();
+    }//GEN-LAST:event_odswiezMItemActionPerformed
+
+    private void zamknijMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zamknijMItemActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_zamknijMItemActionPerformed
+
+    private void zamknijOknoMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zamknijOknoMItemActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_zamknijOknoMItemActionPerformed
+
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Seanse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Seanse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Seanse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Seanse.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                EntityManager em=Persistence.createEntityManagerFactory("kinoPU").createEntityManager();
+                kino.Rezerwacja film;
+                TypedQuery<kino.Rezerwacja> q;
+                try{
+                    q = em.createNamedQuery("Rezerwacja.findById", kino.Rezerwacja.class);
+                    q.setParameter("id", 2);
+                    film = (kino.Rezerwacja)q.getResultList().toArray()[0];
+                }
+                finally{
+                    em.close();
+                }
+                
+                new Rezerwacje(film).setVisible(true);
+                
+            }
+        });
+    }
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu actionMenu;
     private javax.swing.JSlider biletySlider;
     private javax.swing.JLabel cenaLabel;
+    private javax.swing.JPanel cenaPanel;
     private javax.swing.JLabel cenaTextLabel;
+    private javax.swing.JLabel dataLabel;
+    private javax.swing.JLabel dataOpisLabel;
     private javax.swing.JLabel ekranLabel;
     private javax.swing.JPanel ekranPanel;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel emailLabel;
+    private javax.swing.JLabel emailOpisLabel;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JLabel godzinaLabel;
+    private javax.swing.JLabel godzinaOpisLabel;
+    private javax.swing.JLabel imieLabel;
+    private javax.swing.JLabel imieOpisLabel;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel klientPanel;
     private javax.swing.JPanel legendaPanel;
     private javax.swing.JPanel miejscaPanel;
+    private javax.swing.JLabel nazwiskoLabel;
+    private javax.swing.JLabel nazwiskoOpisLabel;
     private javax.swing.JLabel normalneLabel;
     private javax.swing.JLabel normalneTextLabel;
     private javax.swing.JToggleButton odrezerwowaneLegendaTButton;
     private javax.swing.JButton odswiezButton;
+    private javax.swing.JMenuItem odswiezMItem;
     private javax.swing.JButton odznaczButton;
     private javax.swing.JLabel rezerwacjeLabel;
     private javax.swing.JList<kino.Rezerwacja> rezerwacjeList;
     private javax.swing.JPanel rezerwacjePanel;
+    private javax.swing.JLabel rezyserLabel;
+    private javax.swing.JLabel rezyserOpis;
+    private javax.swing.JLabel rokLabel;
+    private javax.swing.JLabel rokOpisLabel;
     private javax.swing.JPanel salaPanel;
+    private javax.swing.JPanel seansLabel;
     private javax.swing.JButton skasujButton;
+    private javax.swing.JLabel typLabel;
+    private javax.swing.JLabel typOpisLabel;
+    private javax.swing.JLabel tytulLabel;
+    private javax.swing.JLabel tytulOpisLabel;
     private javax.swing.JLabel ulgoweLabel;
     private javax.swing.JLabel ulgoweTextLabel;
     private javax.swing.JToggleButton wolneLegendaTButton;
     private javax.swing.JToggleButton wybraneLegendaTButton;
     private javax.swing.JButton wykupButton;
     private javax.swing.JToggleButton zajeteLegendaTButton;
+    private javax.swing.JMenuItem zamknijMItem;
+    private javax.swing.JMenuItem zamknijOknoMItem;
     private javax.swing.JToggleButton zarezerwowaneLegendaTButton;
     // End of variables declaration//GEN-END:variables
 }
