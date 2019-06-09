@@ -138,6 +138,8 @@ public class Seanse extends javax.swing.JFrame {
         actionMenu = new javax.swing.JMenu();
         odswiezMItem = new javax.swing.JMenuItem();
         szuakjMItem = new javax.swing.JMenuItem();
+        viewMenu = new javax.swing.JMenu();
+        filmyMItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Seanse");
@@ -145,6 +147,7 @@ public class Seanse extends javax.swing.JFrame {
 
         seansePanel.setPreferredSize(new java.awt.Dimension(350, 522));
 
+        seansList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         seansList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 seansListValueChanged(evt);
@@ -282,7 +285,6 @@ public class Seanse extends javax.swing.JFrame {
         );
 
         tytulLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tytulLabel.setText("JAKIS FILM");
 
         fileMenu.setText("File");
 
@@ -327,6 +329,18 @@ public class Seanse extends javax.swing.JFrame {
         actionMenu.add(szuakjMItem);
 
         jMenuBar1.add(actionMenu);
+
+        viewMenu.setText("View");
+
+        filmyMItem.setText("Filmy");
+        filmyMItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filmyMItemActionPerformed(evt);
+            }
+        });
+        viewMenu.add(filmyMItem);
+
+        jMenuBar1.add(viewMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -479,6 +493,11 @@ public class Seanse extends javax.swing.JFrame {
         new RezerwacjeSzukaj().setVisible(true);
     }//GEN-LAST:event_szuakjMItemActionPerformed
 
+    private void filmyMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filmyMItemActionPerformed
+        // TODO add your handling code here:
+        new Filmy().setVisible(true);
+    }//GEN-LAST:event_filmyMItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -538,6 +557,7 @@ public class Seanse extends javax.swing.JFrame {
     private javax.swing.JButton dodajButton;
     private javax.swing.JPanel dodajSeansPanel;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuItem filmyMItem;
     private javax.swing.JLabel godzinaLabel;
     private javax.swing.JFormattedTextField godzinaText;
     private javax.swing.JLabel jLabel1;
@@ -551,6 +571,7 @@ public class Seanse extends javax.swing.JFrame {
     private javax.swing.JButton skasujButton;
     private javax.swing.JMenuItem szuakjMItem;
     private javax.swing.JLabel tytulLabel;
+    private javax.swing.JMenu viewMenu;
     private javax.swing.JMenuItem zamknijMItem;
     private javax.swing.JMenuItem zamknijOknoMItem;
     // End of variables declaration//GEN-END:variables

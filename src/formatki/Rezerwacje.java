@@ -266,6 +266,8 @@ public class Rezerwacje extends javax.swing.JFrame {
         actionMenu = new javax.swing.JMenu();
         odswiezMItem = new javax.swing.JMenuItem();
         szuakjMItem = new javax.swing.JMenuItem();
+        viewMenu = new javax.swing.JMenu();
+        filmyMItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Rezerwacje i Wykup Biletów");
@@ -291,6 +293,7 @@ public class Rezerwacje extends javax.swing.JFrame {
             }
         });
 
+        rezerwacjeList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         rezerwacjeList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 rezerwacjeListValueChanged(evt);
@@ -576,31 +579,25 @@ public class Rezerwacje extends javax.swing.JFrame {
         godzinaOpisLabel.setText("Godzina:");
 
         godzinaLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        godzinaLabel.setText("10/04/2019");
 
         dataLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        dataLabel.setText("20:30");
 
         tytulOpisLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tytulOpisLabel.setText("Tytuł:");
 
         tytulLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tytulLabel.setText("jLabel1");
 
         typOpisLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         typOpisLabel.setText("Typ:");
 
         typLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        typLabel.setText("3d");
 
         rezyserOpis.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         rezyserOpis.setText("Reżyser:");
 
         rezyserLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        rezyserLabel.setText("jLabel1");
 
         rokLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        rokLabel.setText("jLabel1");
 
         rokOpisLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         rokOpisLabel.setText("Rok:");
@@ -708,6 +705,18 @@ public class Rezerwacje extends javax.swing.JFrame {
 
         jMenuBar1.add(actionMenu);
 
+        viewMenu.setText("View");
+
+        filmyMItem.setText("Filmy");
+        filmyMItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filmyMItemActionPerformed(evt);
+            }
+        });
+        viewMenu.add(filmyMItem);
+
+        jMenuBar1.add(viewMenu);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -764,9 +773,9 @@ public class Rezerwacje extends javax.swing.JFrame {
             em.getTransaction().begin();
             rezerwacja = em.find(rezerwacja.getClass(), rezerwacja.getId());
             em.remove(rezerwacja);
+            em.getTransaction().commit();
             rezerwacjeListModel.removeElement(rezerwacja);
             skasujButton.setEnabled(false);
-            em.getTransaction().commit();
         }
         catch (Exception ex)
         {
@@ -976,6 +985,11 @@ public class Rezerwacje extends javax.swing.JFrame {
         new RezerwacjeSzukaj().setVisible(true);
     }//GEN-LAST:event_szuakjMItemActionPerformed
 
+    private void filmyMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filmyMItemActionPerformed
+        // TODO add your handling code here:
+        new Filmy().setVisible(true);
+    }//GEN-LAST:event_filmyMItemActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -1004,7 +1018,7 @@ public class Rezerwacje extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                EntityManager em=Persistence.createEntityManagerFactory("kinoPU").createEntityManager();
+                EntityManager em=Persistence.createEntityManagerFactory("kinoPU2").createEntityManager();
                 kino.Rezerwacja film;
                 TypedQuery<kino.Rezerwacja> q;
                 try{
@@ -1038,6 +1052,7 @@ public class Rezerwacje extends javax.swing.JFrame {
     private javax.swing.JLabel emailLabel;
     private javax.swing.JLabel emailOpisLabel;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuItem filmyMItem;
     private javax.swing.JLabel godzinaLabel;
     private javax.swing.JLabel godzinaOpisLabel;
     private javax.swing.JLabel imieLabel;
@@ -1072,6 +1087,7 @@ public class Rezerwacje extends javax.swing.JFrame {
     private javax.swing.JLabel tytulOpisLabel;
     private javax.swing.JLabel ulgoweLabel;
     private javax.swing.JLabel ulgoweTextLabel;
+    private javax.swing.JMenu viewMenu;
     private javax.swing.JToggleButton wolneLegendaTButton;
     private javax.swing.JToggleButton wybraneLegendaTButton;
     private javax.swing.JButton wykupButton;

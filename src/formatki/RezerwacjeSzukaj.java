@@ -96,29 +96,38 @@ public class RezerwacjeSzukaj extends javax.swing.JFrame {
         fileMenu = new javax.swing.JMenu();
         zamknijMItem = new javax.swing.JMenuItem();
         zamknijOknoMItem = new javax.swing.JMenuItem();
+        viewMenu = new javax.swing.JMenu();
+        filmyMItem = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Szukanie Rezerwacji");
 
+        ImiejLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         ImiejLabel.setText("Imię");
 
+        NazwiskojLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         NazwiskojLabel.setText("Nazwisko");
 
+        FilmjLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         FilmjLabel.setText("Film");
 
-        WyszukajjButton.setText("Wyszukaj");
+        WyszukajjButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        WyszukajjButton.setText("Wyszukaj Rezerwacje");
         WyszukajjButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 WyszukajjButtonActionPerformed(evt);
             }
         });
 
-        PrzejdzjButton.setText("Przejdz do seansu");
+        PrzejdzjButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        PrzejdzjButton.setText("Przejdz do Rezerwacji");
         PrzejdzjButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PrzejdzjButtonActionPerformed(evt);
             }
         });
 
+        rezerwacjeList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(rezerwacjeList);
 
         FilmjTextField.addActionListener(new java.awt.event.ActionListener() {
@@ -149,6 +158,18 @@ public class RezerwacjeSzukaj extends javax.swing.JFrame {
 
         jMenuBar1.add(fileMenu);
 
+        viewMenu.setText("View");
+
+        filmyMItem.setText("Filmy");
+        filmyMItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filmyMItemActionPerformed(evt);
+            }
+        });
+        viewMenu.add(filmyMItem);
+
+        jMenuBar1.add(viewMenu);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -156,57 +177,50 @@ public class RezerwacjeSzukaj extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(WyszukajjButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
-                .addComponent(PrzejdzjButton)
-                .addGap(43, 43, 43))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(WyszukajjButton, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(ImiejLabel)
-                        .addGap(34, 34, 34)
-                        .addComponent(ImiejTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(FilmjLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(NazwiskojLabel))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(NazwiskojLabel)
+                            .addComponent(ImiejLabel)
+                            .addComponent(FilmjLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(NazwiskojTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                            .addComponent(FilmjTextField))))
-                .addGap(24, 24, 24))
+                            .addComponent(ImiejTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                            .addComponent(FilmjTextField)
+                            .addComponent(NazwiskojTextField)))
+                    .addComponent(PrzejdzjButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(jScrollPane1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(78, 78, 78)
+                        .addGap(99, 99, 99)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ImiejTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ImiejLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                            .addComponent(ImiejLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ImiejTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(NazwiskojTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(NazwiskojLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                            .addComponent(NazwiskojLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(NazwiskojTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(FilmjLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(FilmjTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(WyszukajjButton)
-                    .addComponent(PrzejdzjButton))
-                .addGap(51, 51, 51))
+                            .addComponent(FilmjTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(WyszukajjButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(PrzejdzjButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(83, 83, 83)))
+                .addContainerGap())
         );
 
         pack();
@@ -240,6 +254,11 @@ public class RezerwacjeSzukaj extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_zamknijOknoMItemActionPerformed
+
+    private void filmyMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filmyMItemActionPerformed
+        // TODO add your handling code here:
+        new Filmy().setVisible(true);
+    }//GEN-LAST:event_filmyMItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -289,9 +308,11 @@ public class RezerwacjeSzukaj extends javax.swing.JFrame {
     private javax.swing.JButton PrzejdzjButton;
     private javax.swing.JButton WyszukajjButton;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuItem filmyMItem;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<kino.Rezerwacja> rezerwacjeList;
+    private javax.swing.JMenu viewMenu;
     private javax.swing.JMenuItem zamknijMItem;
     private javax.swing.JMenuItem zamknijOknoMItem;
     // End of variables declaration//GEN-END:variables

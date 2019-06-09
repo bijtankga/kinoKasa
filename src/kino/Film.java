@@ -145,7 +145,7 @@ public class Film implements Serializable {
 
     @Override
     public String toString() {
-        return "kino.Film[ id=" + id + " ]";
+        return nazwa + " ("+rok+")";
     }
     
 }
